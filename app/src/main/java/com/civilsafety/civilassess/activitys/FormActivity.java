@@ -283,7 +283,7 @@ public class FormActivity extends AppCompatActivity   {
         setTextTitle();
 
         // get value selected page from local database.
-        cursor = db.rawQuery("SELECT *FROM " + ElementDatabaseHelper.ElEMENTTABLE_NAME
+        cursor = db.rawQuery("SELECT * FROM " + ElementDatabaseHelper.ElEMENTTABLE_NAME
                 + " WHERE " + ElementDatabaseHelper.ECOL_11 + "=? AND "
                 + ElementDatabaseHelper.ECOL_7 + "=?", new String[]{formid, String.valueOf(i)});
 
@@ -1701,15 +1701,19 @@ public class FormActivity extends AppCompatActivity   {
     private void MultipleChoice(String title, final String id) {
 
         ArrayList<String> mylist = new ArrayList<String>();
+        final ArrayList<String> myindexlist = new ArrayList<String>();
         Cursor cursor = ODb.rawQuery("SELECT *FROM " + ElementOptionDatabaseHelper.OPTIONTABLE_NAME + " WHERE "
                 + ElementOptionDatabaseHelper.OCOL_2 + "=? AND " + ElementOptionDatabaseHelper.OCOL_3 + "=? ORDER BY "
-                + ElementOptionDatabaseHelper.OCOL_6 + " ASC" , new String[]{formid, id});
+                + ElementOptionDatabaseHelper.OCOL_5 + " ASC" , new String[]{formid, id});
 
 
         if(cursor.moveToFirst()){
             do{
                 String data = cursor.getString(cursor.getColumnIndex("OOption"));
                 mylist.add(data);
+
+                String index = cursor.getString(cursor.getColumnIndex("OOptionId"));
+                myindexlist.add(index);
             }while (cursor.moveToNext());
 
         }
@@ -1741,11 +1745,13 @@ public class FormActivity extends AppCompatActivity   {
                 radioButtonView.setId(View.generateViewId());
             }
             radioButtonView.setText(mylist.get(i));
+            final int finalI = i;
             radioButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int idx = radioGroup.indexOfChild(radioButtonView);
-                    element_data.put("element_" + id, String.valueOf(idx + 1));
+                    element_data.put("element_" + id, myindexlist.get(finalI));
+//                    element_data.put("element_" + id, String.valueOf(idx + 1));
 //                    Toast.makeText(FormActivity.this, String.valueOf(idx), Toast.LENGTH_LONG).show();
                 }
             });

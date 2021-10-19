@@ -3,15 +3,15 @@ package com.civilsafety.civilassess.Common;
 public class Common {
     private String ApiKey = "?api_key=54d0a2c6b96b514cb47c3645714f7ce8";
     private String registerUrl = "register";
-//    private String TestloginUrl = "http://192.168.107.100/api/login";
-//    private String TestbaseUrl = "http://192.168.107.100/api/";
+//    private String TestloginUrl = "http://10.10.11.25/olat/newapi/login";
+//    private String TestbaseUrl = "http://10.10.11.25/olat/newapi/";
 //    private String mainItemUrl = "forms";
-//    private String formelementUrl = "http://192.168.107.100/api/form_elements/";
-//    private String elemnetOptionUrl = "http://192.168.107.100/api/form_elements_options";
-//    private String forgetUrl = "http://192.168.107.100/api/forget";
-//    private String codeUrl = "http://192.168.107.100/api/forget/valid";
-//    private String setpassUrl = "http://192.168.107.100/api/forget/setpassword";
-//    private String saveUrl = "http://192.168.107.100/api/form/save";
+//    private String formelementUrl = "http://10.10.11.25/olat/newapi/form_elements/";
+//    private String elemnetOptionUrl = "http://10.10.11.25/olat/newapi/form_elements_options";
+//    private String forgetUrl = "http://10.10.11.25/olat/newapi/forget";
+//    private String codeUrl = "http://10.10.11.25/olat/newapi/forget/valid";
+//    private String setpassUrl = "http://10.10.11.25/olat/newapi/forget/setpassword";
+//    private String saveUrl = "http://10.10.11.25/olat/newapi/form/save";
 
     private String TestloginUrl = "http://online-anytime.com.au/olat/newapi/login";
     private String TestbaseUrl = "http://online-anytime.com.au/olat/newapi/";
