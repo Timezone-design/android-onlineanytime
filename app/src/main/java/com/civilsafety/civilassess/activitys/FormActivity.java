@@ -114,6 +114,7 @@ public class FormActivity extends AppCompatActivity   {
     static ArrayList<String> sigleElementArray = new ArrayList<String>();
     static ArrayList<String> numberElementArray = new ArrayList<String>();
     static ArrayList<String> emailElementArray = new ArrayList<String>();
+    static ArrayList<String> dateElementArray = new ArrayList<String>();
 
     @SuppressLint("ResourceType")
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -996,6 +997,7 @@ public class FormActivity extends AppCompatActivity   {
         uploadbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GetElementValue();
                 scrollY = customScrollview.getScrollY();
                 Bundle bundle = new Bundle();
                 bundle.putString("scroll", String.valueOf(scrollY));
@@ -1045,6 +1047,7 @@ public class FormActivity extends AppCompatActivity   {
         dateEditText.setText(dateTime);
         dateEditText.setTag("element_" + id);
         dateElementid = "element_" + id;
+        dateElementArray.add("element_" + id);
         String dateL = element_data.get(dateElementid);
         if(dateL != null){
             String[] separated = dateL.split("-");
@@ -1530,6 +1533,7 @@ public class FormActivity extends AppCompatActivity   {
                 sigleElementArray.clear();
                 numberElementArray.clear();
                 emailElementArray.clear();
+                dateElementArray.clear();
                 linearLayout.removeAllViewsInLayout();
                 checkpage = showcheckbtn +1;
                 showElement(showcheckbtn +1 );
@@ -1545,6 +1549,7 @@ public class FormActivity extends AppCompatActivity   {
                 sigleElementArray.clear();
                 numberElementArray.clear();
                 emailElementArray.clear();
+                dateElementArray.clear();
                 linearLayout.removeAllViewsInLayout();
                 checkpage = showcheckbtn +1;
                 showElement(showcheckbtn +1 );
@@ -1561,6 +1566,7 @@ public class FormActivity extends AppCompatActivity   {
                 sigleElementArray.clear();
                 numberElementArray.clear();
                 emailElementArray.clear();
+                dateElementArray.clear();
                 linearLayout.removeAllViewsInLayout();
                 checkpage = showcheckbtn - 1;
                 showElement(showcheckbtn - 1 );
@@ -1907,15 +1913,17 @@ public class FormActivity extends AppCompatActivity   {
         }
 
         if(dateElementid != null){
-            try {
-                EditText editText = linearLayout.findViewWithTag(dateElementid);
-                String currentString = editText.getText().toString();
-                String[] separated = currentString.split("-");
-                String date = separated[2] +"-"+ separated[1] +"-"+ separated[0];
-                element_data.put(dateElementid, date);
-                linearLayout.removeView(editText);
-                dateElementid = null;
-            }catch (Exception e){}
+            for (int i = 0; i < dateElementArray.size(); i++) {
+                try {
+                    EditText editText = linearLayout.findViewWithTag(dateElementArray.get(i));
+                    String currentString = editText.getText().toString();
+                    String[] separated = currentString.split("-");
+                    String date = separated[2] +"-"+ separated[1] +"-"+ separated[0];
+                    element_data.put(dateElementArray.get(i), date);
+                    linearLayout.removeView(editText);
+                    dateElementid = null;
+                }catch (Exception e){}
+            }
         }
 
         if(phone1 != null || phone2 != null || phone3 != null){
