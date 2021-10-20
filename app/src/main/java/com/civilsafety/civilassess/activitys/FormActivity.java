@@ -27,6 +27,7 @@ import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -860,7 +861,13 @@ public class FormActivity extends AppCompatActivity   {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //The following code is to disable  scroll view on gesture touchListener.
-                customScrollview.setEnableScrolling(false);
+//                Log.d("touch event", String.valueOf(event.getAction()));
+                if (event.getAction() == 0) {
+                    customScrollview.setEnableScrolling(false);
+                }
+                if (event.getAction() == 3) {
+                    customScrollview.setEnableScrolling(true);
+                }
                 final Toast toast = Toast.makeText(getApplicationContext(), "press save to continue", Toast.LENGTH_SHORT);
                 toast.show();
 
@@ -920,7 +927,7 @@ public class FormActivity extends AppCompatActivity   {
                 SignatureView signatureView  = signEles.get("element_" + id);
                 bitmap = signatureView.getSignature();
                 elementSignature.put("element_" + id, bitmap);
-                customScrollview.setEnableScrolling(true);
+//                customScrollview.setEnableScrolling(true);
             }
         });
 
@@ -1161,15 +1168,19 @@ public class FormActivity extends AppCompatActivity   {
     private void DropDown(String title, String id) {
         final String dropid = id;
         ArrayList<String> dropList = new ArrayList<String>();
+        final ArrayList<String> dropIndexList = new ArrayList<String>();
         Cursor cursor = ODb.rawQuery("SELECT *FROM " + ElementOptionDatabaseHelper.OPTIONTABLE_NAME + " WHERE "
                 + ElementOptionDatabaseHelper.OCOL_2 + "=? AND "
                 + ElementOptionDatabaseHelper.OCOL_3 + "=? ORDER BY "
-                + ElementOptionDatabaseHelper.OCOL_6 + " ASC" , new String[]{formid, id});
+                + ElementOptionDatabaseHelper.OCOL_5 + " ASC" , new String[]{formid, id});
 
         if(cursor.moveToFirst()){
             do{
                 String data = cursor.getString(cursor.getColumnIndex("OOption"));
                 dropList.add(data);
+
+                String index = cursor.getString(cursor.getColumnIndex("OOptionId"));
+                dropIndexList.add(index);
             }while (cursor.moveToNext());
 
         }
@@ -1201,7 +1212,7 @@ public class FormActivity extends AppCompatActivity   {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                element_data.put("element_" + dropid, String.valueOf(position + 1));
+                element_data.put("element_" + dropid, dropIndexList.get(position));
                 // Notify the selected item text
 //                Toast.makeText(getApplicationContext(), "Selected : " + position, Toast.LENGTH_SHORT).show();
             }
@@ -1220,16 +1231,20 @@ public class FormActivity extends AppCompatActivity   {
 
     private void CheckBoxes(String title, final String id) {
         ArrayList<String> mylist = new ArrayList<String>();
+        final ArrayList<String> myindexlist = new ArrayList<String>();
 
         Cursor cursor = ODb.rawQuery("SELECT *FROM " + ElementOptionDatabaseHelper.OPTIONTABLE_NAME
                 + " WHERE " + ElementOptionDatabaseHelper.OCOL_2 + "=? AND " + ElementOptionDatabaseHelper.OCOL_3
-                + "=? ORDER BY " + ElementOptionDatabaseHelper.OCOL_6 + " ASC" , new String[]{formid, id});
+                + "=? ORDER BY " + ElementOptionDatabaseHelper.OCOL_5 + " ASC" , new String[]{formid, id});
 
 
         if(cursor.moveToFirst()){
             do{
                 String data = cursor.getString(cursor.getColumnIndex("OOption"));
                 mylist.add(data);
+
+                String index = cursor.getString(cursor.getColumnIndex("OOptionId"));
+                myindexlist.add(index);
             }while (cursor.moveToNext());
 
         }
@@ -1249,13 +1264,13 @@ public class FormActivity extends AppCompatActivity   {
 
         for(int i = 0; i < mylist.size(); i ++){
             final CheckBox checkBox = new CheckBox(this);
-            if(element_data.get("element_" + id + "_" + String.valueOf(i+1)) != null){
-                if(Integer.parseInt(element_data.get("element_" + id + "_" + String.valueOf(i+1))) == 1){
+            if(element_data.get("element_" + id + "_" + myindexlist.get(i)) != null){
+                if(Integer.parseInt(element_data.get("element_" + id + "_" + myindexlist.get(i))) == 1){
                     checkBox.setChecked(true);
                 }
             }
 
-            checkBox.setTag("element_" + id + "_" + String.valueOf(i+1));
+            checkBox.setTag("element_" + id + "_" + myindexlist.get(i));
             checkBox.setText(mylist.get(i));
             checkBox.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             checkBox.setTextSize(getResources().getDimension(R.dimen.textsize_normal));
@@ -1264,7 +1279,7 @@ public class FormActivity extends AppCompatActivity   {
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    element_data.put("element_" + id + "_" + String.valueOf(finalI+1), "1");
+                    element_data.put("element_" + id + "_" + myindexlist.get(finalI), "1");
 //                    Toast.makeText(FormActivity.this, String.valueOf(finalI), Toast.LENGTH_SHORT).show();
                 }
             });
