@@ -861,11 +861,10 @@ public class FormActivity extends AppCompatActivity   {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //The following code is to disable  scroll view on gesture touchListener.
-//                Log.d("touch event", String.valueOf(event.getAction()));
                 if (event.getAction() == 0) {
                     customScrollview.setEnableScrolling(false);
                 }
-                if (event.getAction() == 3) {
+                if (event.getAction() == 1) {
                     customScrollview.setEnableScrolling(true);
                 }
                 final Toast toast = Toast.makeText(getApplicationContext(), "press save to continue", Toast.LENGTH_SHORT);
@@ -927,7 +926,7 @@ public class FormActivity extends AppCompatActivity   {
                 SignatureView signatureView  = signEles.get("element_" + id);
                 bitmap = signatureView.getSignature();
                 elementSignature.put("element_" + id, bitmap);
-//                customScrollview.setEnableScrolling(true);
+                customScrollview.setEnableScrolling(true);
             }
         });
 
